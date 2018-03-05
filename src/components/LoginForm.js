@@ -1,5 +1,6 @@
 import React from 'react';
 import { withStyles } from 'material-ui';
+import fetch from 'isomorphic-fetch';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
 
@@ -21,22 +22,14 @@ class LoginForm extends React.Component {
     },
   }
 
-  handleUsernameInputChange = (event) => {
+  handleInputChange = (event) => {
     event.persist();
-    this.setState((prevState) => ({
-      username: {
-        ...prevState.username,
-        value: event.target.value,
-      },
-    }));
-  }
+    const { name, value } = event.target;
 
-  handlePasswordInputChange = (event) => {
-    event.persist();
     this.setState((prevState) => ({
-      password: {
-        ...prevState.password,
-        value: event.target.value,
+      [name]: {
+        ...prevState[name],
+        value: value,
       },
     }));
   }
@@ -46,9 +39,8 @@ class LoginForm extends React.Component {
 
     const { username, password } = this.state;
 
-    console.log('Login:', username.value, password.value);
+    this.props.onSubmit(username.value, password.value);
 
-    // ...
   }
 
   render() {
@@ -65,20 +57,22 @@ class LoginForm extends React.Component {
           type="text"
           margin="normal"
           autoComplete="username"
+          name="username"
           value={username.value}
-          onChange={this.handleUsernameInputChange}
+          onChange={this.handleInputChange}
           error={!username.isValid}
         />
         <TextField
           required
           fullWidth
           label="Password"
-          placeholder="Type your username..."
+          placeholder="Type your password..."
           type="password"
           margin="normal"
+          name="password"
           autoComplete="current-password"
           value={password.value}
-          onChange={this.handlePasswordInputChange}
+          onChange={this.handleInputChange}
           error={!password.isValid}
         />
         <Button
