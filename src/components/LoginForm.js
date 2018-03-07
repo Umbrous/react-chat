@@ -1,6 +1,5 @@
 import React from 'react';
 import { withStyles } from 'material-ui';
-import fetch from 'isomorphic-fetch';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
 

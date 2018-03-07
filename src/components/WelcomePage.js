@@ -8,7 +8,6 @@ import Typography from 'material-ui/Typography';
 import Paper from 'material-ui/Paper';
 import Tabs, { Tab } from 'material-ui/Tabs';
 
-
 import LoginForm from './LoginForm';
 import SignupForm from './SignupForm';
 
@@ -28,9 +27,9 @@ class WelcomePage extends React.Component {
     activeTab: 0,
   };
 
-  // componentDidMount() {
-  //   this.props.recieveAuth();
-  // }
+  componentDidMount() {
+    this.props.recieveAuth();
+  }
 
   handleTabChage = (event, value) => {
     this.setState({ activeTab: value });

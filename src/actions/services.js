@@ -1,12 +1,11 @@
 import * as types from '../constants'
 import history from '../utils/history';
-import {REDIRECT} from "../constants";
 
 export function redirect(to) {
   return (dispatch) => {
-    history.push(`${process.env.PUBLIC_URL}${to}`);
+    history.push(`${process.env.PUBLIC_URL}/${to}`);
     dispatch({
-      type: REDIRECT,
+      type: types.REDIRECT,
       payload: { to },
     })
   }
