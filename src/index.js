@@ -6,7 +6,16 @@ import registerServiceWorker from './registerServiceWorker';
 
 import 'typeface-roboto';
 
+const rootElem = document.getElementById('root');
+
 ReactDOM.render(
   <App />,
-  document.getElementById('root'));
+  rootElem);
+
+if (module.hot) {
+  module.hot.accept('./components/App', () => {
+    ReactDOM.render(<App />, rootElem);
+  })
+}
+
 registerServiceWorker();

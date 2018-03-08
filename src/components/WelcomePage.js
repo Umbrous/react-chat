@@ -1,4 +1,5 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import { withStyles } from 'material-ui/styles';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
@@ -9,8 +10,6 @@ import Tabs, { Tab } from 'material-ui/Tabs';
 
 import LoginForm from './LoginForm';
 import SignupForm from './SignupForm';
-
-
 
 const styles = theme => ({
   paper: {
@@ -26,16 +25,26 @@ class WelcomePage extends React.Component {
 
   state = {
     activeTab: 0,
+  };
+
+  componentDidMount() {
+    this.props.recieveAuth();
   }
 
   handleTabChage = (event, value) => {
     this.setState({ activeTab: value });
-  }
+  };
 
   render() {
 
-    const { classes } = this.props;
+    const { classes, signup, login, isAuthenticated } = this.props;
     const { activeTab } = this.state;
+
+    if(isAuthenticated) {
+      return (
+        <Redirect to="/chat" />
+      )
+    }
 
     return (
 
@@ -61,8 +70,8 @@ class WelcomePage extends React.Component {
                 </Tabs>
               </AppBar>
               <div className={classes.tabContent}>
-                {activeTab === 0 && <LoginForm />}
-                {activeTab === 1 && <SignupForm />}
+                {activeTab === 0 && <LoginForm onSubmit={login} />}
+                {activeTab === 1 && <SignupForm onSubmit={signup} />}
               </div>
             </Paper>
           </Grid>
