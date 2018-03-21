@@ -10,7 +10,7 @@ export default function callApi(endpoint, token, options, payload) {
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
-      ...authHeaders
+      ...authHeaders,
     },
     body: JSON.stringify(payload),
     ...options
@@ -21,6 +21,6 @@ export default function callApi(endpoint, token, options, payload) {
         return json;
       }
 
-      throw new Error(json.messages);
-    })
+      throw new Error(json.message);
+    });
 }

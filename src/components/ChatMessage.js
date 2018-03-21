@@ -1,9 +1,13 @@
 import React from 'react';
-import classnames from 'classnames';
+import classNames from 'classnames';
+import moment from 'moment';
 import { withStyles } from 'material-ui/styles';
+import Paper from 'material-ui/Paper';
 import Typography from 'material-ui/Typography';
 import Avatar from './Avatar';
-import Paper from 'material-ui/Paper';
+
+import senderName from '../utils/sender-name';
+import randomColor from '../utils/color-from';
 
 const styles = theme => ({
   messageWrapper: {
@@ -24,38 +28,60 @@ const styles = theme => ({
   messageFromMe: {
     marginRight: theme.spacing.unit * 2,
     backgroundColor: '#e6dcff'
+  },
+  statusMessage: {
+    width: '100%',
+    textAlign: 'center',
+  },
+  statusMessageUser: {
+    display: 'inline',
   }
 });
 
-const ChatMessage = ({ classes, sender, content }) => {
+const ChatMessage = ({ classes, content, sender, activeUser, createdAt, statusMessage }) => {
+  const isMessageFromMe = sender._id === activeUser._id;
 
-  const isMessageFromMe = sender === 'me';
+  const displayedName = senderName(sender);
+
+  if (statusMessage) {
+    return (
+      <div className={classes.messageWrapper}>
+        <Typography className={classes.statusMessage}>
+          <Typography variant="caption" style={{ color: randomColor(sender._id)}} className={classes.statusMessageUser}>
+            {displayedName}
+          </Typography>
+          {content}
+          <Typography variant="caption" component="span">
+            {moment(createdAt).fromNow()}
+          </Typography>
+        </Typography>
+      </div>
+    )
+  }
 
   const userAvatar = (
-    <Avatar colorFrom={sender}>
-      {sender}
+    <Avatar colorFrom={sender._id}>
+      {displayedName}
     </Avatar>
   );
+
   return (
-    <div className={classnames(
-      classes.messageWrapper,
-      isMessageFromMe && classes.messageWrappperFromMe
-    )}>
+    <div className={classNames(classes.messageWrapper, isMessageFromMe && classes.messageWrappperFromMe)}>
       {!isMessageFromMe && userAvatar}
-      <Paper className={classnames(
-        classes.message,
-        isMessageFromMe && classes.messageFromMe
-      )}>
-        <Typography variant="caption">
-          {sender}
+      <Paper className={classNames(classes.message, isMessageFromMe && classes.messageFromMe)}>
+        <Typography variant="caption" style={{ color: randomColor(sender._id)}}>
+          {displayedName}
         </Typography>
         <Typography variant="body1">
           {content}
         </Typography>
+        <Typography variant="caption" className={classes.time}>
+          {moment(createdAt).fromNow()}
+        </Typography>
       </Paper>
       {isMessageFromMe && userAvatar}
     </div>
-  )
+  );
 }
 
 export default withStyles(styles)(ChatMessage);
